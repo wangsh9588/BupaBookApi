@@ -80,7 +80,7 @@ namespace BupaBookApi.Tests.UnitTests
         }
 
         [Fact]
-        public async Task GetBooksAsync_Should_ReturnSuccess_WhenBooksFound()
+        public async Task GetBooksAsync_Should_ReturnSuccessWithAllBooks_WhenBooksFound()
         {
             // Arrange
             var expectedCategorisedBooks = new CategorisedBooks();
@@ -102,12 +102,12 @@ namespace BupaBookApi.Tests.UnitTests
             result.IsSuccess.Should().BeTrue();
             result.Error.Should().BeEmpty();
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            result?.Result?.AdultBooks?.SetEquals(expectedCategorisedBooks.AdultBooks);
-            result?.Result?.ChildrenBooks?.SetEquals(expectedCategorisedBooks.ChildrenBooks);
+            result?.Result?.AdultBooks?.SetEquals(expectedCategorisedBooks.AdultBooks).Should().BeTrue();
+            result?.Result?.ChildrenBooks?.SetEquals(expectedCategorisedBooks.ChildrenBooks).Should().BeTrue();
         }
 
         [Fact]
-        public async Task GetBooksAsync_Should_ReturnSuccessWithHardcover_WhenFilterSet()
+        public async Task GetBooksAsync_Should_ReturnSuccessWithHardcoverBooks_WhenFilterSetToHardcover()
         {
             // Arrange
             var expectedCategorisedBooks = new CategorisedBooks();
@@ -129,8 +129,8 @@ namespace BupaBookApi.Tests.UnitTests
             result.IsSuccess.Should().BeTrue();
             result.Error.Should().BeEmpty();
             result.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            result?.Result?.AdultBooks?.SetEquals(expectedCategorisedBooks.AdultBooks);
-            result?.Result?.ChildrenBooks?.SetEquals(expectedCategorisedBooks.ChildrenBooks);
+            result?.Result?.AdultBooks?.SetEquals(expectedCategorisedBooks.AdultBooks).Should().BeTrue();
+            result?.Result?.ChildrenBooks?.SetEquals(expectedCategorisedBooks.ChildrenBooks).Should().BeTrue();
         }
     }
 }

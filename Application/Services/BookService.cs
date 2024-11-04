@@ -34,12 +34,12 @@ namespace Application.Services
 
                 if (bookOwnersApiResult.IsSuccess)
                 {
-                    var groupedBooks = bookOwnersApiResult?.Data?.GroupBy(owner => owner.Age >= _bookOwnerConfig.MinimumAdultAge ? Adults : Children);
-                    var adultBooks = GetBooksByAgeCategory(Adults, bookFilter, groupedBooks);
+                    var groupedBookOwners = bookOwnersApiResult?.Data?.GroupBy(owner => owner.Age >= _bookOwnerConfig.MinimumAdultAge ? Adults : Children);
+                    var adultBooks = GetBooksByAgeCategory(Adults, bookFilter, groupedBookOwners);
                     if (adultBooks?.Any() ?? false)
                         categorisedBooks.SetAdultBooks(adultBooks);
 
-                    var childrenBooks = GetBooksByAgeCategory(Children, bookFilter, groupedBooks);
+                    var childrenBooks = GetBooksByAgeCategory(Children, bookFilter, groupedBookOwners);
                     if (childrenBooks?.Any() ?? false)
                         categorisedBooks.SetChildrenBooks(childrenBooks);
 
@@ -55,15 +55,15 @@ namespace Application.Services
             }
             catch (Exception ex) 
             {
-                _logger?.Error($"{loggerPrefix} An unexpected error occurred. Error message: {ex.Message}");
+                _logger?.Error($"{loggerPrefix} {ErrorMessages.UnexpectedError} Error message: {ex.Message}");
                 serviceResult = ServiceResult<CategorisedBooks>.Failure(HttpStatusCode.ServiceUnavailable, ex.Message);
             }
             return serviceResult;
         }
 
-        private HashSet<string>? GetBooksByAgeCategory(string ageCategory, BookFilter bookFilter, IEnumerable<IGrouping<string, BookOwner>>? groupedBooks)
+        private HashSet<string>? GetBooksByAgeCategory(string ageCategory, BookFilter bookFilter, IEnumerable<IGrouping<string, BookOwner>>? groupedBookOwners)
         {
-            var categorisedBooks = groupedBooks
+            var categorisedBooks = groupedBookOwners
                 ?.FirstOrDefault(g => g.Key.Equals(ageCategory))
                 ?.SelectMany(category => category.Books);
 
