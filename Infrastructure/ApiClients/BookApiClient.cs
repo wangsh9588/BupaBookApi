@@ -1,8 +1,9 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Net;
-using System.Text.Json;
 
 namespace Infrastructure.ApiClients
 {
@@ -26,11 +27,19 @@ namespace Infrastructure.ApiClients
             {
                 var response = await _httpClient.GetAsync("bookowners").ConfigureAwait(false);
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
                 if (response.IsSuccessStatusCode)
                 {
+                    var jsonSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy()
+                        }
+                    };
                     apiResult = string.IsNullOrEmpty(responseContent)
                         ? ApiResult<IEnumerable<BookOwner>>.Failure(ApiError.Create(HttpStatusCode.NotFound, ErrorMessages.BookOwnersNotFound))
-                        : ApiResult<IEnumerable<BookOwner>>.Success(JsonSerializer.Deserialize<IEnumerable<BookOwner>>(responseContent));
+                        : ApiResult<IEnumerable<BookOwner>>.Success(JsonConvert.DeserializeObject<IEnumerable<BookOwner>>(responseContent, jsonSettings));
                 }
                 else
                 {

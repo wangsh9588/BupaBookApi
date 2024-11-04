@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Core.Models
 {
     public class CategorisedBooks
     {
-        [JsonPropertyName("adultBooks")]
+        [JsonProperty("adultBooks")]
         public HashSet<string> AdultBooks { get; private set; } = [];
 
-        [JsonPropertyName("childrenBooks")]
+        [JsonProperty("childrenBooks")]
         public HashSet<string> ChildrenBooks { get; private set; } = [];
 
         public void SetAdultBooks(HashSet<string> adultBooks)

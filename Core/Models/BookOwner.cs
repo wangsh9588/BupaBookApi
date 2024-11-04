@@ -1,16 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Core.Models
 {
     public class BookOwner
     {
-        [JsonPropertyName("name")]
+        [JsonRequired]
+        [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("age")]
+        [JsonRequired]
+        [JsonProperty("age")]
         public int Age { get; set; }
 
-        [JsonPropertyName("books")]
+        [JsonRequired]
+        [JsonProperty("books")]
         public IEnumerable<Book> Books { get; set; } = [];
     }
 }

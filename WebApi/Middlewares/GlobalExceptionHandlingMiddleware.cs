@@ -1,7 +1,6 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net;
-using System.Text.Json;
+﻿using System.Net;
 using Core.Models;
+using Newtonsoft.Json;
 
 namespace WebApi.Middlewares
 {
@@ -31,7 +30,7 @@ namespace WebApi.Middlewares
                 _logger?.Error(ex, ex.Message);
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 httpContext.Response.ContentType = "application/json";
-                await httpContext.Response.WriteAsync(JsonSerializer.Serialize(ServiceResult<object>.Failure(HttpStatusCode.InternalServerError, ex.Message)));
+                await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(ServiceResult<object>.Failure(HttpStatusCode.InternalServerError, ex.Message)));
             }
         }
     }

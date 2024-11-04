@@ -1,13 +1,15 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Core.Models
 {
     public record Book
     {
-        [JsonPropertyName("name")]
+        [JsonRequired]
+        [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("type")]
+        [JsonRequired]
+        [JsonProperty("type")]
         public string Type { get; set; } = string.Empty;
     }
 }
